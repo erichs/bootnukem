@@ -1,0 +1,77 @@
+#!/bin/bash
+
+# bootnukem: purge old/unused kernel packages, clearing space on /boot
+# with no args, defaults to removing all kernel versions prior to running kernel, which may or may not be the latest installed kernel
+# with -f (force), removes all kernels *except* the running kernel.
+
+version=0.1
+
+main() {
+  local kernels="$(select_kernels $*)"
+  if [ -n "$kernels" ]; then
+    echo "/boot prior to purge:"
+    df -h /boot
+    apt-get purge -y $kernels
+    update-grub
+    echo "/boot after purge:"
+    df -h /boot
+  fi
+}
+
+select_kernels() {
+if [ "$FORCE" = true ]; then
+  select_all_kernels_except_running
+else
+  select_kernels_older_than_running
+fi
+}
+
+
+select_kernels_older_than_running() {
+  local running_version=$(running_kernel_version)
+  local test_version k
+  for k in $(list_all_installed_kernels); do
+    test_version=$(echo $k | sed -e 's/linux-[[:alpha:]]*-//' -e's/-[[:alpha:]]*$//')
+    if dpkg --compare-versions $test_version lt $running_version; then
+      echo $k
+    fi
+  done
+}
+
+select_all_kernels_except_running() {
+  list_all_installed_kernels | grep -v $(running_kernel_version)
+}
+
+list_all_installed_kernels() {
+  dpkg -l linux-{image,headers}-"[0-9]*" | awk '/ii/{print $2}'
+}
+
+running_kernel_version() {
+  uname -r | sed 's/-[[:alpha:]]*$//'
+}
+
+usage() {
+  echo "bootnukem $version"
+  echo "$0 [-f] [-v] [-h]"
+  echo
+  echo "without args: prune all kernel packages older than currently running kernel"
+  echo "-f: prune all kernel packages *except* the running kernel (force)"
+  echo "-h: this help"
+  echo "-v: show version"
+}
+
+case $1 in
+-v)
+  echo $version
+  exit 0;;
+-f)
+  FORCE=true;;
+*)
+  if [ -n "$1" ]; then
+    usage
+    exit 1
+  fi;;
+esac
+
+main $*
+exit 0
