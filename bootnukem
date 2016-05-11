@@ -1,25 +1,52 @@
 #!/bin/bash
 
 # bootnukem: purge old/unused kernel packages, clearing space on /boot
-# with no args, defaults to removing all kernel versions prior to running kernel, which may or may not be the latest installed kernel
-# with -f (force), removes all kernels *except* the running kernel.
 
-version=0.1
+version=0.2
 
 main() {
-  local kernels="$(select_kernels $*)"
-  if [ -n "$kernels" ]; then
-    echo "/boot prior to purge:"
-    df -h /boot
-    apt-get purge -y $kernels
-    update-grub
-    echo "/boot after purge:"
-    df -h /boot
+  local kernels="$(select_kernels)"
+  if [ "$dry" = yes ]; then
+    list_kernels
+  else
+    purge_kernels
   fi
 }
 
+list_kernels() {
+  [ -z "$kernels" ] && return
+  cat <<EOF
+Kernel packages to be removed:
+
+$kernels
+
+EOF
+  if [ "$dry" = yes ]; then
+    echo "NOTE: no action has been taken"
+  fi
+}
+
+purge_kernels() {
+  [ -z "$kernels" ] && return
+  [ "$(whoami)" != root ] && echo "You must be root!" && exit 1
+
+  header=$(df -h /boot | head -1)
+  disk_before=$(df -h /boot | tail -1)
+
+  list_kernels
+
+  apt-get purge -y $kernels
+  update-grub
+
+  disk_after=$(df -h /boot | tail -1)
+  echo
+  echo $header
+  echo "$disk_before  (before)"
+  echo "$disk_after  (after)"
+}
+
 select_kernels() {
-if [ "$FORCE" = true ]; then
+if [ "$scorch" = yes ]; then
   select_all_kernels_except_running
 else
   select_kernels_older_than_running
@@ -50,28 +77,57 @@ running_kernel_version() {
   uname -r | sed 's/-[[:alpha:]]*$//'
 }
 
-usage() {
-  echo "bootnukem $version"
-  echo "$0 [-f] [-v] [-h]"
-  echo
-  echo "without args: prune all kernel packages older than currently running kernel"
-  echo "-f: prune all kernel packages *except* the running kernel (force)"
-  echo "-h: this help"
-  echo "-v: show version"
+version() {
+  echo $version
+  exit 0
 }
 
-case $1 in
--v)
-  echo $version
-  exit 0;;
--f)
-  FORCE=true;;
-*)
-  if [ -n "$1" ]; then
-    usage
-    exit 1
-  fi;;
-esac
+usage() {
+cat <<EOF
+bootnukem $OPTIONS
+$*
 
-main $*
+       Usage: bootnukem <[options]>
+       Options:
+                                 Without args: Prune all kernels older than running one
+
+               -d   --dry-run    Does not purge, only shows what *would* be removed ($dry)
+               -s   --scorch     Prune all kernels *except* the running one ($scorch)
+               -h   --help       Show this help message
+               -v   --version    Show only the version number
+
+version $version
+EOF
+exit 1
+}
+
+OPTIONS=$@
+
+dry='no'
+scorch='no'
+
+while getopts ':dshv-' OPTION ; do
+  case "$OPTION" in
+    d  ) dry=yes     ;;
+    s  ) scorch=yes  ;;
+    h  ) usage       ;;
+    v  ) version     ;;
+    -  ) [ $OPTIND -ge 1 ] && optind=$(expr $OPTIND - 1 ) || optind=$OPTIND
+         eval OPTION="\$$optind"
+         OPTION=$(echo $OPTION | cut -d'=' -f1)
+         case $OPTION in
+             --dry-run   ) dry=yes              ;;
+             --scorch    ) scorch=yes           ;;
+             --help      ) usage                ;;
+             --version   ) version              ;;
+             * )  usage " >>>> invalid option(s)" ;;
+         esac
+       OPTIND=1
+       shift
+      ;;
+    * )  usage ">>>> invalid option(s)"           ;;
+  esac
+done
+
+main
 exit 0

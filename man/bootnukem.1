@@ -1,0 +1,110 @@
+.\" generated with Ronn/v0.7.3
+.\" http://github.com/rtomayko/ronn/tree/0.7.3
+.
+.TH "BOOTNUKEM" "1" "May 2016" "" ""
+.
+.SH "NAME"
+\fBbootnukem\fR \- purge /boot of old kernels
+.
+.SH "SYNOPSIS"
+\fBbootnukem\fR
+.
+.br
+\fBbootnukem\fR \fB\-d\fR|\fB\-\-dry\-run\fR
+.
+.br
+\fBbootnukem\fR \fB\-s\fR|\fB\-\-scorch\fR
+.
+.br
+\fBbootnukem\fR \fB\-h\fR|\fB\-\-help\fR
+.
+.br
+\fBbootnukem\fR \fB\-v\fR|\fB\-\-version\fR
+.
+.SH "DESCRIPTION"
+\fBbootnukem\fR removes unused kernel packages, saving space on /boot\. A common problem on stock Ubuntu distributions is a smallish volume mounted on /boot, and tedious and error\-prone methods for removing older kernels once the system has rebooted into a newly installed kernel\.
+.
+.P
+In its default mode, \fBbootnukem\fR will remove all kernel packages older than the \fIcurrently running\fR kernel\. If you\'ve updated packages but not rebooted, you\'ll likely have one or more newer kernel versions installed that haven\'t been booted into\. These will consume space on /boot\.
+.
+.SH "OPTIONS"
+.
+.TP
+\fB\-d\fR, \fB\-\-dry\-run\fR
+Don\'t purge kernels, just output which kernels \fIwould\fR be removed\.
+.
+.TP
+\fB\-s\fR, \fB\-\-scorch\fR
+Purge \fIall\fR kernels except the currently running kernel\. Use this with caution!
+.
+.TP
+\fB\-h\fR, \fB\-\-help\fR
+Show basic usage\.
+.
+.TP
+\fB\-v\fR, \fB\-\-version\fR
+Display the version number only\.
+.
+.SH "EXAMPLES"
+Clean\-as\-you\-go, preserving the running kernel and the newly\-upgraded kernel:
+.
+.IP "" 4
+.
+.nf
+
+# aptitude safe\-upgrade
+# bootnukem
+# reboot
+.
+.fi
+.
+.IP "" 0
+.
+.P
+Maximally clean /boot volume prior to kernel upgrade:
+.
+.IP "" 4
+.
+.nf
+
+# bootnukem \-\-scorch
+# aptitude safe\-upgrade
+# reboot
+.
+.fi
+.
+.IP "" 0
+.
+.P
+See which kernels bootnukem \fIwould\fR remove:
+.
+.IP "" 4
+.
+.nf
+
+# bootnukem \-\-scorch \-\-dry\-run
+.
+.fi
+.
+.IP "" 0
+.
+.SH "DEPENDENCIES"
+\fBbootnukem\fR is written in Bash and depends on \fBapt\-get\fR, \fBawk\fR, \fBdf\fR, \fBdpkg\fR, \fBsed\fR, and \fBupdate\-grub\fR\.
+.
+.SH "CAVEATS"
+\fBbootnukem\fR is known to work on Ubuntu LTS releases\. YMMV\.
+.
+.SH "COPYRIGHT"
+bootnukem is Copyright (C) 2016 Erich Smith \fIhttps://github\.com/erichs\fR
+.
+.SH "LICENSE"
+The MIT License (MIT)
+.
+.P
+Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:
+.
+.P
+The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software\.
+.
+.P
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT\. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE\.
