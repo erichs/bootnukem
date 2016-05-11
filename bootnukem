@@ -2,7 +2,7 @@
 
 # bootnukem: purge old/unused kernel packages, clearing space on /boot
 
-version=0.2
+version=0.2.1
 
 main() {
   local kernels="$(select_kernels)"
@@ -96,7 +96,7 @@ $*
                -h   --help       Show this help message
                -v   --version    Show only the version number
 
-version $version
+version $version, see also 'man bootnukem'
 EOF
 exit 1
 }
