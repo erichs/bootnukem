@@ -4,10 +4,10 @@ bootnukem(1) -- purge /boot of old kernels
 ## SYNOPSIS
 
 `bootnukem` <br>
-`bootnukem` `-d`|`--dry-run`<br>
-`bootnukem` `-s`|`--scorch`<br>
-`bootnukem` `-h`|`--help`<br>
-`bootnukem` `-v`|`--version`
+`bootnukem` `--dry-run`<br>
+`bootnukem` `--scorch`<br>
+`bootnukem` `--help`<br>
+`bootnukem` `--version`
 
 ## DESCRIPTION
 
@@ -23,16 +23,16 @@ booted into. These will consume space on /boot.
 
 ## OPTIONS
 
-  * `-d`, `--dry-run`:
+  * `--dry-run`:
     Don't purge kernels, just output which kernels *would* be removed.
 
-  * `-s`, `--scorch`:
+  * `--scorch`:
     Purge *all* kernels except the currently running kernel. Use this with caution!
 
-  * `-h`, `--help`:
+  * `--help`:
     Show basic usage.
 
-  * `-v`, `--version`:
+  * `--version`:
     Display the version number only.
 
 ## EXAMPLES

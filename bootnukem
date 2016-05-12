@@ -2,7 +2,7 @@
 
 # bootnukem: purge old/unused kernel packages, clearing space on /boot
 
-version=0.2.1
+version=0.2.2
 
 main() {
   local kernels="$(select_kernels)"
@@ -89,43 +89,30 @@ $*
 
        Usage: bootnukem <[options]>
        Options:
-                                 Without args: Prune all kernels older than running one
+                            Without args: Prune all kernels older than running one
 
-               -d   --dry-run    Does not purge, only shows what *would* be removed ($dry)
-               -s   --scorch     Prune all kernels *except* the running one ($scorch)
-               -h   --help       Show this help message
-               -v   --version    Show only the version number
+               --dry-run    Does not purge, only shows what *would* be removed ($dry)
+               --scorch     Prune all kernels *except* the running one ($scorch)
+               --help       Show this help message
+               --version    Show only the version number
 
 version $version, see also 'man bootnukem'
 EOF
 exit 1
 }
 
-OPTIONS=$@
+OPTIONS="$@"
 
 dry='no'
 scorch='no'
 
-while getopts ':dshv-' OPTION ; do
-  case "$OPTION" in
-    d  ) dry=yes     ;;
-    s  ) scorch=yes  ;;
-    h  ) usage       ;;
-    v  ) version     ;;
-    -  ) [ $OPTIND -ge 1 ] && optind=$(expr $OPTIND - 1 ) || optind=$OPTIND
-         eval OPTION="\$$optind"
-         OPTION=$(echo $OPTION | cut -d'=' -f1)
-         case $OPTION in
-             --dry-run   ) dry=yes              ;;
-             --scorch    ) scorch=yes           ;;
-             --help      ) usage                ;;
-             --version   ) version              ;;
-             * )  usage " >>>> invalid option(s)" ;;
-         esac
-       OPTIND=1
-       shift
-      ;;
-    * )  usage ">>>> invalid option(s)"           ;;
+for option in $OPTIONS; do
+  case "$option" in
+    --dry-run) dry=yes                   ;;
+    --scorch ) scorch=yes                ;;
+    --help   ) usage                     ;;
+    --version) version                   ;;
+    * )  usage " >>>> invalid option(s)" ;;
   esac
 done
 
