@@ -31,3 +31,10 @@ Credits
 -------
 
 Initial work based on this [AskUbuntu post](http://askubuntu.com/questions/89710/how-do-i-free-up-more-space-in-boot/90219#90219).
+
+<!---
+# how do I free up more space in boot
+# clean boot partition ubuntu
+# apt upgrade /boot 100%
+# /boot partition full
+--->
