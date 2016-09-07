@@ -3,6 +3,11 @@ BootNukem
 
 Purge /boot of old kernels.
 
+Why?
+---
+
+Because it is really annoying when /boot fills up from normal `apt-get` upgrade activity. Since I do not typically compile my own kernels and keep these around, I wanted a tool that would safely purge Ubuntu/Debian kernels automatically. Finding none, I wrote this.
+
 Installation
 ------------
 
@@ -11,6 +16,11 @@ git clone https://github.com/erichs/bootnukem.git
 cd bootnukem
 sudo ./install.sh
 ```
+
+Advanced Installation
+---------------------
+
+On a build machine or VM, clone this repo and run `./build_deb.sh`. This will generate a binary `.deb` file that may be distributed and installed with `dpkg -i` on your target hosts.
 
 Basic Usage
 -----------
