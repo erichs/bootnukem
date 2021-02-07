@@ -10,7 +10,148 @@
       {
         "title": "Workflow",
         "thumbnail": "./public/content/images/thumbnail.jpg",
-        "id": 0
+        "id": 0,
+        "diagramJson": {
+          "cells": [
+            {
+              "type": "tm.Process",
+              "size": {
+                "width": 100,
+                "height": 100
+              },
+              "position": {
+                "x": 259,
+                "y": 51
+              },
+              "angle": 0,
+              "id": "dfb67707-3e20-4ea4-a497-2da2c33a0ff1",
+              "z": 1,
+              "hasOpenThreats": false,
+              "privilegeLevel": "root",
+              "attrs": {
+                ".element-shape": {
+                  "class": "element-shape hasNoOpenThreats isInScope"
+                },
+                "text": {
+                  "text": "purge kernels"
+                },
+                ".element-text": {
+                  "class": "element-text hasNoOpenThreats isInScope"
+                }
+              }
+            },
+            {
+              "type": "tm.Process",
+              "size": {
+                "width": 100,
+                "height": 100
+              },
+              "position": {
+                "x": 50,
+                "y": 51
+              },
+              "angle": 0,
+              "id": "87d120b2-4556-443e-a041-10a52859d362",
+              "z": 2,
+              "hasOpenThreats": false,
+              "outOfScope": true,
+              "reasonOutOfScope": "Does not modify anything on disk.",
+              "attrs": {
+                ".element-shape": {
+                  "class": "element-shape hasNoOpenThreats isOutOfScope"
+                },
+                "text": {
+                  "text": "List Kernels"
+                },
+                ".element-text": {
+                  "class": "element-text hasNoOpenThreats isInScope"
+                }
+              }
+            },
+            {
+              "type": "tm.Store",
+              "size": {
+                "width": 160,
+                "height": 80
+              },
+              "position": {
+                "x": 281,
+                "y": 348
+              },
+              "angle": 0,
+              "id": "4eec591b-7b81-4765-8953-a24509c502b6",
+              "z": 3,
+              "hasOpenThreats": false,
+              "threats": [
+                {
+                  "status": "Mitigated",
+                  "severity": "High",
+                  "title": "Tool deletes currently running kernel",
+                  "type": "Denial of service",
+                  "description": "Deleting the running kernel is undesirable.",
+                  "mitigation": "Behavior or `apt-get purge` will not allow this."
+                }
+              ],
+              "attrs": {
+                ".element-shape": {
+                  "class": "element-shape hasNoOpenThreats isInScope"
+                },
+                "text": {
+                  "text": "/boot"
+                },
+                ".element-text": {
+                  "class": "element-text hasNoOpenThreats isInScope"
+                }
+              }
+            },
+            {
+              "type": "tm.Flow",
+              "smooth": true,
+              "source": {
+                "id": "dfb67707-3e20-4ea4-a497-2da2c33a0ff1"
+              },
+              "target": {
+                "id": "4eec591b-7b81-4765-8953-a24509c502b6"
+              },
+              "vertices": [
+                {
+                  "x": 331,
+                  "y": 243
+                }
+              ],
+              "id": "3ba92d98-29ba-489e-8a96-9af8096ebebb",
+              "labels": [
+                {
+                  "position": {
+                    "distance": 0.3237392778405616,
+                    "offset": 43.05534435905329
+                  },
+                  "attrs": {
+                    "text": {
+                      "text": "delete",
+                      "font-weight": "400",
+                      "font-size": "small"
+                    }
+                  }
+                }
+              ],
+              "z": 4,
+              "hasOpenThreats": false,
+              "attrs": {
+                ".marker-target": {
+                  "class": "marker-target hasNoOpenThreats isInScope"
+                },
+                ".connection": {
+                  "class": "connection hasNoOpenThreats isInScope"
+                }
+              }
+            }
+          ]
+        },
+        "size": {
+          "height": 697.213134765625,
+          "width": 790
+        }
       }
     ],
     "reviewer": "erichs"
