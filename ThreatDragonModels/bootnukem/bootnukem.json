@@ -1,0 +1,18 @@
+{
+  "summary": {
+    "title": "bootnukem",
+    "owner": "erichs",
+    "description": "Get rid of stale kernels in /boot"
+  },
+  "detail": {
+    "contributors": [],
+    "diagrams": [
+      {
+        "title": "Workflow",
+        "thumbnail": "./public/content/images/thumbnail.jpg",
+        "id": 0
+      }
+    ],
+    "reviewer": "erichs"
+  }
+}
