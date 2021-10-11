@@ -70,7 +70,7 @@ select_all_kernels_except_running() {
 }
 
 list_all_installed_kernels() {
-  dpkg -l linux-{image,headers}-"[0-9]*" | awk '/ii/{print $2}'
+  dpkg -l linux-{image,headers,modules,tools}-"[0-9]*" | awk '/ii/{print $2}'
 }
 
 running_kernel_version() {
