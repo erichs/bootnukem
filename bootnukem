@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 # bootnukem: purge old/unused kernel packages, clearing space on /boot
 
